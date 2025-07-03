@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Yukify{% endblock %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <input type="submit" value="Upload">
+</form>
+
+<!-- 🎵 Background YouTube Music -->
+<div class="audio-player">
+  <iframe width="0" height="0"
+    src="https://www.youtube.com/embed/obeMinmzhSE?autoplay=1&loop=1&playlist=obeMinmzhSE"
+    frameborder="0"
+    allow="autoplay; encrypted-media"
+    allowfullscreen>
+  </iframe>
+</div>
+
+<!-- 🌠 Slideshow only -->
+<h2 style="margin-top: 30px;">🌠 Flashing Slideshow</h2>
+<div class="slideshow-container" id="slideshow">
+  {% for f in files %}
+    {% if f.filetype in ['jpg', 'jpeg', 'png', 'gif'] %}
+      <div class="slide">
+        <img src="{{ url_for('uploaded_file', filename=f.filename) }}" alt="{{ f.filename }}">
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function showSlide(index) {
+  slides.forEach((slide, i) => {
+    slide.classList.toggle('active', i === index);
+  });
+}
+
+function nextSlide() {
+  current = (current + 1) % slides.length;
+  showSlide(current);
+}
+
+if (slides.length > 0) {
+  showSlide(current);
+  setInterval(nextSlide, 4000);
+}
+</script>
+{% endblock %}
